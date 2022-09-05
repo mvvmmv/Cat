@@ -43,14 +43,14 @@ class Cat():
             self.x += self.settings.cat_speed
             self.cat_looks_right = True
         
-        if self.moving_left and self.rect.left > 100:
+        if self.moving_left and self.rect.left > self.settings.border_width:
             self.x -= self.settings.cat_speed
             self.cat_looks_right = False
         
         if self.moving_up and self.rect.top > 0:
             self.y -= self.settings.cat_speed
             
-        if self.moving_down and self.rect.bottom < self.screen_rect.height - 100:
+        if self.moving_down and self.rect.bottom < self.screen_rect.height - self.settings.border_width:
             self.y += self.settings.cat_speed
         
         # Update attribute rect in regards with self.x, self.y.

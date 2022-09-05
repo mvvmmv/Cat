@@ -6,4 +6,10 @@ class Settings():
         self.screen_width = 700
         self.screen_height = 500
         
+        # The cat's features
         self.cat_speed = 0.5
+        
+        # The borders settings
+        self.border_color = (89, 89, 89)
+        self.border_width = 100
+        
