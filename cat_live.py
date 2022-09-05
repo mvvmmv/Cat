@@ -4,6 +4,7 @@ import pygame
 from cat import Cat
 from game_board import GameBoard
 from settings import Settings
+from plate import Plate
 
 class CatLive:
     """Class for managing cat's life"""
@@ -21,6 +22,7 @@ class CatLive:
         
         self.cat = Cat(self)
         self.gb = GameBoard(self)
+        self.plate = Plate(self)
     
     def run_game(self):
         """Run main cicle of the game"""
@@ -66,6 +68,7 @@ class CatLive:
     def _update_screen(self):
         """Updates screen"""
         self.screen.fill(self.settings.bg_color)
+        self.plate.blitme()
         self.cat.blitme()
         self.gb.draw_lines()
         

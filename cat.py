@@ -1,8 +1,12 @@
 import pygame
+from pygame.sprite import Sprite
 
-class Cat():
+class Cat(Sprite):
     """Create a cat"""
+    
     def __init__(self, cl_game):
+        """Initialize the cat and define the start location"""
+        super().__init__()
         self.screen = cl_game.screen
         self.screen_rect = cl_game.screen.get_rect()
         
