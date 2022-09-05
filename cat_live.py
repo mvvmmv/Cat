@@ -11,6 +11,9 @@ class CatLive:
     def __init__(self):
         pygame.init()
         
+        programIcon = pygame.image.load('images/cat.png')
+        pygame.display.set_icon(programIcon)
+        
         self.settings = Settings()
         self.screen = pygame.display.set_mode((self.settings.screen_width,self.settings.screen_height))
         
