@@ -5,6 +5,8 @@ from cat import Cat
 from settings import Settings
 from plate import Plate
 from static_obstacle import StaticObstacle
+from clock import Clock
+from score import Score
 
 class CatLive:
     """Class for managing cat's life"""
@@ -44,10 +46,15 @@ class CatLive:
             (100,0),(600, 1), [self.all_sprites, self.collision_sprites], 
             self.settings.obst_color)
         
+        self.clock = Clock(self)        
+        
         # Sprite setup
         self.plate = Plate(self, [self.all_sprites,self.collision_sprites])
-        self.cat = Cat(self, self.all_sprites,self.collision_sprites)
-    
+        self.cat = Cat(self, self.all_sprites, self.collision_sprites)
+        
+        self.score = Score(self, self.cat)
+        
+     
     def run_game(self):
         """Run main cycle of the game"""
         
@@ -62,12 +69,13 @@ class CatLive:
                 if event.type == pygame.QUIT:
                     sys.exit()
                 
-            self.screen.fill(self.settings.bg_color)         
-            
+            self.screen.fill(self.settings.bg_color)        
             self.all_sprites.update(dt)
             self.all_sprites.draw(self.screen)
-            
+            self.plate.check_refill()
             # display output
+            self.clock.update()
+            self.score.update()
             pygame.display.update()
             
 if __name__ == '__main__':

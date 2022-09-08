@@ -9,3 +9,4 @@ class StaticObstacle(pygame.sprite.Sprite):
         self.image.fill(color)
         self.rect = self.image.get_rect(topleft = pos)
         self.old_rect = self.rect.copy()
+        self.name = 'boarder '+str(self.rect.topleft)

@@ -29,7 +29,10 @@ class Cat(Sprite):
         # Movement
         self.pos = pygame.math.Vector2(self.rect.topleft)
         self.direction = pygame.math.Vector2()
+            
         self.obstacles = obstacles
+        
+        self.fish_eaten = 0
 
     def check_input(self):
         """Handles keyboard and mouse events"""
@@ -49,7 +52,9 @@ class Cat(Sprite):
             self.direction.x = -1
         else:
             self.direction.x = 0
-
+        if keys[pygame.K_SPACE]:
+            self.do()
+        
     def update(self, dt):
         """Update location of the cat"""
         
@@ -77,7 +82,7 @@ class Cat(Sprite):
         
         collision_sprites = pygame.sprite.spritecollide(
             self, self.obstacles, False)
-
+        
         if collision_sprites:
             if direction == 'horizontal':
                 for sprite in collision_sprites:
@@ -99,3 +104,21 @@ class Cat(Sprite):
                     if self.rect.bottom >= sprite.rect.top and self.old_rect.bottom <= sprite.rect.top:
                        self.rect.bottom = sprite.rect.top
                        self.pos.y = self.rect.y
+
+    def do(self):
+       # fish_eaten = False
+        for obstacle in self.obstacles:
+            if obstacle.name == 'plate':
+                if (obstacle.rect.right + 5 >= self.rect.left \
+                        and obstacle.rect.right < self.rect.right \
+                        and self.image == self.image_straight \
+                        and self.rect.centery in range(obstacle.rect.centery - 5,obstacle.rect.centery + 5)) \
+                        or (obstacle.rect.left - 5 <= self.rect.right \
+                        and obstacle.rect.left > self.rect.left \
+                        and self.image == self.image_inverse \
+                        and self.rect.centery in range(obstacle.rect.centery - 5,obstacle.rect.centery + 5)):
+               #     fish_eaten =
+                    obstacle.empty()                  
+                    # Increase number of eaten fish
+                #    self.fish_eaten += 1
+                #    print(self.fish_eaten)
