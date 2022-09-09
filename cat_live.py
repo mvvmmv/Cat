@@ -55,7 +55,7 @@ class CatLive:
         self.score = Score(self, self.cat)
         
      
-    def run_game(self):
+    def run_game(self): 
         """Run main cycle of the game"""
         
         # loop
@@ -69,7 +69,7 @@ class CatLive:
                 if event.type == pygame.QUIT:
                     sys.exit()
                 
-            self.screen.fill(self.settings.bg_color)        
+            self.screen.fill(self.settings.bg_color) 
             self.all_sprites.update(dt)
             self.all_sprites.draw(self.screen)
             self.plate.check_refill()

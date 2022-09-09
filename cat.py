@@ -1,6 +1,7 @@
 from filecmp import clear_cache
 import pygame
 from pygame.sprite import Sprite
+import time
 
 
 class Cat(Sprite):
@@ -33,12 +34,13 @@ class Cat(Sprite):
         self.obstacles = obstacles
         
         self.fish_eaten = 0
+        self.first_time = 0
 
-    def check_input(self):
+    def check_input(self, dt):
         """Handles keyboard and mouse events"""
         
         keys = pygame.key.get_pressed()
-
+               
         if keys[pygame.K_UP]:
             self.direction.y = -1
         elif keys[pygame.K_DOWN]:
@@ -52,14 +54,16 @@ class Cat(Sprite):
             self.direction.x = -1
         else:
             self.direction.x = 0
+            
         if keys[pygame.K_SPACE]:
-            self.do()
+                self.do(dt)
         
+  
     def update(self, dt):
         """Update location of the cat"""
         
         self.old_rect = self.rect.copy()
-        self.check_input()
+        self.check_input(dt)
 
         if self.direction.magnitude() != 0:
             self.direction = self.direction.normalize()
@@ -105,20 +109,24 @@ class Cat(Sprite):
                        self.rect.bottom = sprite.rect.top
                        self.pos.y = self.rect.y
 
-    def do(self):
-       # fish_eaten = False
+    def do(self,dt):
+        time1 = time.time()
+        time_passed = time1 > self.first_time * dt * 1.5 * 1000 + 1000000000
+        print(time_passed)
         for obstacle in self.obstacles:
             if obstacle.name == 'plate':
                 if (obstacle.rect.right + 5 >= self.rect.left \
                         and obstacle.rect.right < self.rect.right \
                         and self.image == self.image_straight \
-                        and self.rect.centery in range(obstacle.rect.centery - 5,obstacle.rect.centery + 5)) \
+                        and self.rect.centery in range(obstacle.rect.centery - 5,obstacle.rect.centery + 5) \
+                        and time_passed) \
                         or (obstacle.rect.left - 5 <= self.rect.right \
                         and obstacle.rect.left > self.rect.left \
                         and self.image == self.image_inverse \
-                        and self.rect.centery in range(obstacle.rect.centery - 5,obstacle.rect.centery + 5)):
-               #     fish_eaten =
-                    obstacle.empty()                  
-                    # Increase number of eaten fish
-                #    self.fish_eaten += 1
-                #    print(self.fish_eaten)
+                        and self.rect.centery in range(obstacle.rect.centery - 5,obstacle.rect.centery + 5) \
+                        and time_passed):
+                    obstacle.empty()
+                    self.fish_eaten += 1
+                    self.first_time = time1
+                    print(self.fish_eaten)
+                    #print(self.fish_eaten, self.first_time*dt* 1000 + 5000000000, time1, self.first_time*dt* 1000 + 5000000000 - time1)
