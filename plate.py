@@ -42,5 +42,5 @@ class Plate(Sprite):
     def check_refill(self):
         """Refill the plate if it's empty"""
         
-        if time.time() - self.time_empty >= 30:
+        if time.time() - self.time_empty >= self.settings.fish_delay:
             self.image = self.image_fish

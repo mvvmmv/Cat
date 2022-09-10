@@ -8,9 +8,16 @@ class Settings():
         self.obst_color = (207, 200, 184)
         
         # The cat's features
-        self.cat_speed = 50
+        self.cat_speed = 100
+        self.meow_delay = 20
         
         # The borders settings
         self.border_color = (89, 89, 89)
         self.border_width = 100
         
+        # Plate's features
+        # Delay in fish providing
+        self.fish_delay = 5
+        # Acceptable range to be around the plate to still get the fish
+        # (y axis)
+        self.free_y = 15

@@ -1,7 +1,8 @@
-from filecmp import clear_cache
 import pygame
 from pygame.sprite import Sprite
+from pygame.mixer import Sound
 import time
+from datetime import datetime
 
 
 class Cat(Sprite):
@@ -30,11 +31,15 @@ class Cat(Sprite):
         # Movement
         self.pos = pygame.math.Vector2(self.rect.topleft)
         self.direction = pygame.math.Vector2()
-            
+        
+        # Sounds
+        self.meow_sound = pygame.mixer.Sound('sounds/meow.wav')
+        self.cat_current_time = time.time()
+        
         self.obstacles = obstacles
         
         self.fish_eaten = 0
-        self.first_time = 0
+        self.start_time = time.time()
 
     def check_input(self, dt):
         """Handles keyboard and mouse events"""
@@ -110,23 +115,30 @@ class Cat(Sprite):
                        self.pos.y = self.rect.y
 
     def do(self,dt):
-        time1 = time.time()
-        time_passed = time1 > self.first_time * dt * 1.5 * 1000 + 1000000000
-        print(time_passed)
+        time_do_triggered = time.time()
+        # print(time_do_triggered - self.start_time)
+        time_passed = time_do_triggered > self.start_time + 5
         for obstacle in self.obstacles:
             if obstacle.name == 'plate':
                 if (obstacle.rect.right + 5 >= self.rect.left \
                         and obstacle.rect.right < self.rect.right \
                         and self.image == self.image_straight \
-                        and self.rect.centery in range(obstacle.rect.centery - 5,obstacle.rect.centery + 5) \
-                        and time_passed) \
+                        and self.rect.centery in range(obstacle.rect.centery - self.settings.free_y,obstacle.rect.centery + self.settings.free_y) \
+                        and time_passed and obstacle.image == obstacle.image_fish) \
                         or (obstacle.rect.left - 5 <= self.rect.right \
                         and obstacle.rect.left > self.rect.left \
                         and self.image == self.image_inverse \
-                        and self.rect.centery in range(obstacle.rect.centery - 5,obstacle.rect.centery + 5) \
-                        and time_passed):
+                        and self.rect.centery in range(obstacle.rect.centery - self.settings.free_y,obstacle.rect.centery + self.settings.free_y) \
+                        and time_passed and obstacle.image == obstacle.image_fish):
                     obstacle.empty()
                     self.fish_eaten += 1
-                    self.first_time = time1
-                    print(self.fish_eaten)
+                    self.start_time = time_do_triggered
+                    #print(self.fish_eaten)
                     #print(self.fish_eaten, self.first_time*dt* 1000 + 5000000000, time1, self.first_time*dt* 1000 + 5000000000 - time1)
+    
+    def meow(self):
+        """Makes meow sounds"""
+
+        if time.time() - self.cat_current_time >= self.settings.meow_delay:
+            self.meow_sound.play()
+            self.cat_current_time = time.time()

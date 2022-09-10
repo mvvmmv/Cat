@@ -64,7 +64,8 @@ class CatLive:
             # delta time
             dt = time.time() - last_time
             last_time = time.time()
-            
+            dt = dt
+            print(dt)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     sys.exit()
@@ -73,6 +74,7 @@ class CatLive:
             self.all_sprites.update(dt)
             self.all_sprites.draw(self.screen)
             self.plate.check_refill()
+            self.cat.meow()
             # display output
             self.clock.update()
             self.score.update()
