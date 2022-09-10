@@ -10,7 +10,9 @@ class Settings():
         # The cat's features
         self.cat_speed = 100
         self.meow_delay = 20
-        
+        # Cat images
+        self.cat_images = ['images/cat_0.png', 'images/cat_1.png', \
+            'images/cat_inverse_0.png', 'images/cat_inverse_1.png']
         # The borders settings
         self.border_color = (89, 89, 89)
         self.border_width = 100
@@ -21,3 +23,4 @@ class Settings():
         # Acceptable range to be around the plate to still get the fish
         # (y axis)
         self.free_y = 15
+        self.plate_images = ['images/fish_on_plate.png', 'images/empty_plate.png']

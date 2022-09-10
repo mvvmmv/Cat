@@ -15,8 +15,8 @@ class Plate(Sprite):
         self.settings = cl_game.settings 
         
         # Uploads images of plates and gets rectangle.
-        self.image_fish = pygame.image.load('images/fish_on_plate.png')
-        self.image_empty = pygame.image.load('images/empty_plate.png')
+        self.image_fish = pygame.image.load(self.settings.plate_images[0])
+        self.image_empty = pygame.image.load(self.settings.plate_images[1])
         
         self.image = self.image_fish
         self.rect = self.image.get_rect()

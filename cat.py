@@ -17,11 +17,11 @@ class Cat(Sprite):
         self.settings = cl_game.settings
 
         # Uploads cat looking left image and gets rectangle.
-        self.image_straight = pygame.image.load('images/cat.png')
+        self.image_straight = pygame.image.load(self.settings.cat_images[0])
         self.rect = self.image_straight.get_rect()
         self.image = self.image_straight
         # Uploads cat looking right image and gets rectangle.
-        self.image_inverse = pygame.image.load('images/cat_inverse.png')
+        self.image_inverse = pygame.image.load(self.settings.cat_images[2])
         # self.rect = self.image_inverse.get_rect()
 
         # The cat appears at the center of the screen.

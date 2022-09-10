@@ -13,14 +13,14 @@ class CatLive:
     
     def __init__(self):
         pygame.init()
-        
-        # Set icon for the game window.
-        programIcon = pygame.image.load('images/cat.png')
-        pygame.display.set_icon(programIcon)
-        
+                
         # Set the game window.
         self.settings = Settings()
         self.screen = pygame.display.set_mode((self.settings.screen_width,self.settings.screen_height))
+        
+        # Set icon for the game window.
+        programIcon = pygame.image.load(self.settings.cat_images[0])
+        pygame.display.set_icon(programIcon)
         
         # Set caption for the game window.
         pygame.display.set_caption("Cat's life")
