@@ -124,6 +124,11 @@ class Cat(Sprite):
         """Cat actions"""
         
         time_do_triggered = time.time()
+        # Checking if more than 5 seconds passed from previous run of this function (this function runs after SPACE's been pressed)
+        # SPACE_is_pressed event will be True several times while it's actually been keeping pressed,
+        # but we want to run this function only once after SPACE's been pressed.
+        # That's why I check if it's passed 5 secs or not.        
+        # (Considering that we won't press the key too long. By design I want it to be pressed shortly.)
         time_passed = time_do_triggered > self.start_time + 5
         for obstacle in self.obstacles:
             if obstacle.name == 'plate':
@@ -154,6 +159,8 @@ class Cat(Sprite):
         """Changes the mute flag if M key has been pressed"""
         
         time_sound_triggered = time.time()
+        # Same as for the "do" function.
+        # I check if this fuction was called not later than 5 seconds ago.
         time_passed = time_sound_triggered > self.start_sound_time + 5
         if time_passed:
             # If sound is playing - turn it off
