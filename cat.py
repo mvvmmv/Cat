@@ -8,14 +8,16 @@ from datetime import datetime
 class Cat(Sprite):
     """Create a cat"""
 
-    def __init__(self, cl_game, groups, obstacles):
+    def __init__(self, cl_game, mute_btn, groups, obstacles):
         """Initialize the cat and define the start location"""
         super().__init__(groups)
         self.screen = cl_game.screen
         self.screen_rect = cl_game.screen.get_rect()
 
         self.settings = cl_game.settings
-
+        self.mute_button = mute_btn
+        self.obstacles = obstacles
+        
         # Uploads cat looking left image and gets rectangle.
         self.image_straight = pygame.image.load(self.settings.cat_images[0])
         self.rect = self.image_straight.get_rect()
@@ -34,12 +36,13 @@ class Cat(Sprite):
         
         # Sounds
         self.meow_sound = pygame.mixer.Sound('sounds/meow.wav')
-        self.cat_current_time = time.time()
-        
-        self.obstacles = obstacles
-        
-        self.fish_eaten = 0
+        self.cat_current_time = time.time()   
         self.start_time = time.time()
+        self.start_sound_time = time.time() - 20     
+        
+        # Cat actions counter
+        self.fish_eaten = 0       
+        self.mute_flag = True # game starts with no sound
 
     def check_input(self, dt):
         """Handles keyboard and mouse events"""
@@ -61,7 +64,10 @@ class Cat(Sprite):
             self.direction.x = 0
             
         if keys[pygame.K_SPACE]:
-                self.do(dt)
+            self.do()
+        
+        if keys[pygame.K_m]:
+            self.sound()
         
   
     def update(self, dt):
@@ -114,31 +120,51 @@ class Cat(Sprite):
                        self.rect.bottom = sprite.rect.top
                        self.pos.y = self.rect.y
 
-    def do(self,dt):
+    def do(self):
+        """Cat actions"""
+        
         time_do_triggered = time.time()
-        # print(time_do_triggered - self.start_time)
         time_passed = time_do_triggered > self.start_time + 5
         for obstacle in self.obstacles:
             if obstacle.name == 'plate':
-                if (obstacle.rect.right + 5 >= self.rect.left \
-                        and obstacle.rect.right < self.rect.right \
-                        and self.image == self.image_straight \
-                        and self.rect.centery in range(obstacle.rect.centery - self.settings.free_y,obstacle.rect.centery + self.settings.free_y) \
-                        and time_passed and obstacle.image == obstacle.image_fish) \
-                        or (obstacle.rect.left - 5 <= self.rect.right \
-                        and obstacle.rect.left > self.rect.left \
-                        and self.image == self.image_inverse \
-                        and self.rect.centery in range(obstacle.rect.centery - self.settings.free_y,obstacle.rect.centery + self.settings.free_y) \
-                        and time_passed and obstacle.image == obstacle.image_fish):
-                    obstacle.empty()
-                    self.fish_eaten += 1
-                    self.start_time = time_do_triggered
-                    #print(self.fish_eaten)
-                    #print(self.fish_eaten, self.first_time*dt* 1000 + 5000000000, time1, self.first_time*dt* 1000 + 5000000000 - time1)
-    
+                # Checking if the cat vertical center is in [between obstacle's vertical center - self.settings.free_y, between obstacle's vertical center + self.settings.free_y]
+                center_y_check = self.rect.centery in range(obstacle.rect.centery - self.settings.free_y,obstacle.rect.centery + self.settings.free_y)
+                if time_passed:
+                    if (obstacle.rect.right + 5 >= self.rect.left and obstacle.rect.right < self.rect.right and  center_y_check\
+                            # checking if cat look left
+                            and self.image == self.image_straight \
+                            and obstacle.image == obstacle.image_fish) \
+                            or \
+                            (obstacle.rect.left - 5 <= self.rect.right and obstacle.rect.left > self.rect.left and center_y_check \
+                            # checking if cat look right
+                            and self.image == self.image_inverse \
+                            and obstacle.image == obstacle.image_fish):
+                        obstacle.empty()
+                        self.fish_eaten += 1
+                        self.start_time = time_do_triggered
+               
     def meow(self):
         """Makes meow sounds"""
-
-        if time.time() - self.cat_current_time >= self.settings.meow_delay:
+        time_meow_triggered = time.time()
+        if time.time() - self.cat_current_time >= self.settings.meow_delay and self.mute_flag == False:
             self.meow_sound.play()
-            self.cat_current_time = time.time()
+            self.cat_current_time = time_meow_triggered
+    
+    def sound(self):
+        """Changes the mute flag if M key has been pressed"""
+        
+        time_sound_triggered = time.time()
+        time_passed = time_sound_triggered > self.start_sound_time + 5
+        if time_passed:
+            # If sound is playing - turn it off
+            if self.mute_flag == False:
+                self.mute_button.image = self.mute_button.images[0]
+                self.mute_flag = True
+                self.meow_sound.stop()
+                self.start_sound_time = time_sound_triggered
+            # if sound isn't playing - turn it on
+            elif self.mute_flag == True:
+                self.mute_button.image = self.mute_button.images[1]
+                self.mute_flag = False
+                self.meow()
+                self.start_sound_time = time_sound_triggered

@@ -9,7 +9,7 @@ class Settings():
         
         # The cat's features
         self.cat_speed = 100
-        self.meow_delay = 20
+        self.meow_delay = 5
         # Cat images
         self.cat_images = ['images/cat_0.png', 'images/cat_1.png', \
             'images/cat_inverse_0.png', 'images/cat_inverse_1.png']
@@ -24,3 +24,7 @@ class Settings():
         # (y axis)
         self.free_y = 15
         self.plate_images = ['images/fish_on_plate.png', 'images/empty_plate.png']
+        
+        # Buttons
+        self.images_of_button = ['images/mute.png','images/un_mute.png']
+        self.mb_pos = (10,50)
