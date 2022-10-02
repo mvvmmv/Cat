@@ -44,7 +44,7 @@ class Cat(Sprite):
         self.fish_eaten = 0       
         self.mute_flag = True # game starts with no sound
 
-    def check_input(self, dt):
+    def check_input(self):
         """Handles keyboard and mouse events"""
         
         keys = pygame.key.get_pressed()
@@ -64,26 +64,25 @@ class Cat(Sprite):
             self.direction.x = 0
             
         if keys[pygame.K_SPACE]:
-            self.do()
-        
-        if keys[pygame.K_m]:
-            self.sound()
-        
+            self.do()            
   
-    def update(self, dt):
+    def update(self):
         """Update location of the cat"""
         
         self.old_rect = self.rect.copy()
-        self.check_input(dt)
+        #self.check_input(dt)
+        self.check_input()
 
         if self.direction.magnitude() != 0:
             self.direction = self.direction.normalize()
 
-        self.pos.x += self.direction.x * self.settings.cat_speed * dt
+        #self.pos.x += self.direction.x * self.settings.cat_speed * dt
+        self.pos.x += self.direction.x * self.settings.cat_speed
         self.rect.x = round(self.pos.x)
         self.collision('horizontal')
 
-        self.pos.y += self.direction.y * self.settings.cat_speed * dt
+        #self.pos.y += self.direction.y * self.settings.cat_speed * dt
+        self.pos.y += self.direction.y * self.settings.cat_speed
         self.rect.y = round(self.pos.y)
         self.collision('vertical')
 
@@ -150,28 +149,4 @@ class Cat(Sprite):
                
     def meow(self):
         """Makes meow sounds"""
-        time_meow_triggered = time.time()
-        if time.time() - self.cat_current_time >= self.settings.meow_delay and self.mute_flag == False:
-            self.meow_sound.play()
-            self.cat_current_time = time_meow_triggered
-    
-    def sound(self):
-        """Changes the mute flag if M key has been pressed"""
-        
-        time_sound_triggered = time.time()
-        # Same as for the "do" function.
-        # I check if this fuction was called not later than 5 seconds ago.
-        time_passed = time_sound_triggered > self.start_sound_time + 5
-        if time_passed:
-            # If sound is playing - turn it off
-            if self.mute_flag == False:
-                self.mute_button.image = self.mute_button.images[0]
-                self.mute_flag = True
-                self.meow_sound.stop()
-                self.start_sound_time = time_sound_triggered
-            # if sound isn't playing - turn it on
-            elif self.mute_flag == True:
-                self.mute_button.image = self.mute_button.images[1]
-                self.mute_flag = False
-                self.meow()
-                self.start_sound_time = time_sound_triggered
+        self.meow_sound.play()

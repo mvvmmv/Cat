@@ -1,9 +1,8 @@
 import sys, math, time
 import pygame
-from button import Button
 
-from cat import Cat
 from button import Button
+from cat import Cat
 from settings import Settings
 from plate import Plate
 from static_obstacle import StaticObstacle
@@ -56,29 +55,40 @@ class CatLive:
         
         self.clock = Clock(self)
         self.score = Score(self, self.cat)
-     
+        self.MEOW = pygame.USEREVENT + 1
+        pygame.time.set_timer(self.MEOW, 5000)
+        
     def run_game(self): 
         """Run main cycle of the game"""
-        
-        # loop
-        last_time = time.time()
-        while True:
-            # delta time
-            dt = time.time() - last_time
-            last_time = time.time()
+        clock = pygame.time.Clock()
+        while True:            
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     sys.exit()
-                
-            self.screen.fill(self.settings.bg_color) 
-            self.all_sprites.update(dt)
+                if event.type == self.MEOW:
+                    if self.cat.mute_flag == False:
+                        self.cat.meow()   
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_m:
+                        if self.cat.mute_flag == True:
+                            self.cat.mute_button.image = self.cat.mute_button.images[1]
+                            self.cat.mute_flag = False
+                            break
+                        if self.cat.mute_flag == False:
+                            self.cat.mute_button.image = self.cat.mute_button.images[0]
+                            self.cat.mute_flag = True
+                        
+            self.screen.fill(self.settings.bg_color)
+            self.all_sprites.update()
             self.all_sprites.draw(self.screen)
             self.plate.check_refill()
-            self.cat.meow()
             # display output
             self.clock.update()
             self.score.update()
+            
             pygame.display.update()
+            
+            clock.tick(30)
             
 if __name__ == '__main__':
     # Create instance and run the game.

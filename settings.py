@@ -8,7 +8,7 @@ class Settings():
         self.obst_color = (207, 200, 184)
         
         # The cat's features
-        self.cat_speed = 100
+        self.cat_speed = 5
         self.meow_delay = 5
         # Cat images
         self.cat_images = ['images/cat_0.png', 'images/cat_1.png', \
