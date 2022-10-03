@@ -77,6 +77,8 @@ class CatLive:
                         if self.cat.mute_flag == False:
                             self.cat.mute_button.image = self.cat.mute_button.images[0]
                             self.cat.mute_flag = True
+                    if event.key == pygame.K_SPACE:
+                        self.cat.do() 
                         
             self.screen.fill(self.settings.bg_color)
             self.all_sprites.update()

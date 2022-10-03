@@ -62,9 +62,6 @@ class Cat(Sprite):
             self.direction.x = -1
         else:
             self.direction.x = 0
-            
-        if keys[pygame.K_SPACE]:
-            self.do()            
   
     def update(self):
         """Update location of the cat"""
@@ -120,33 +117,28 @@ class Cat(Sprite):
                        self.pos.y = self.rect.y
 
     def do(self):
-        """Cat actions"""
-        
-        time_do_triggered = time.time()
-        # Checking if more than 5 seconds passed from previous run of this function (this function runs after SPACE's been pressed)
-        # SPACE_is_pressed event will be True several times while it's actually been keeping pressed,
-        # but we want to run this function only once after SPACE's been pressed.
-        # That's why I check if it's passed 5 secs or not.        
-        # (Considering that we won't press the key too long. By design I want it to be pressed shortly.)
-        time_passed = time_do_triggered > self.start_time + 5
+        """Cat actions: eat the fish
+        """
         for obstacle in self.obstacles:
             if obstacle.name == 'plate':
-                # Checking if the cat vertical center is in [between obstacle's vertical center - self.settings.free_y, between obstacle's vertical center + self.settings.free_y]
-                center_y_check = self.rect.centery in range(obstacle.rect.centery - self.settings.free_y,obstacle.rect.centery + self.settings.free_y)
-                if time_passed:
-                    if (obstacle.rect.right + 5 >= self.rect.left and obstacle.rect.right < self.rect.right and  center_y_check\
-                            # checking if cat look left
-                            and self.image == self.image_straight \
-                            and obstacle.image == obstacle.image_fish) \
-                            or \
-                            (obstacle.rect.left - 5 <= self.rect.right and obstacle.rect.left > self.rect.left and center_y_check \
-                            # checking if cat look right
-                            and self.image == self.image_inverse \
-                            and obstacle.image == obstacle.image_fish):
-                        obstacle.empty()
-                        self.fish_eaten += 1
-                        self.start_time = time_do_triggered
-               
+                # Checking if the cat vertical center is in [between obstacle's vertical center 
+                # - self.settings.free_y, between obstacle's vertical center + self.settings.free_y]
+                center_y_check = self.rect.centery in range(obstacle.rect.centery - self.settings.free_y, \
+                                                            obstacle.rect.centery + self.settings.free_y)
+                if (obstacle.rect.right + 5 >= self.rect.left and \
+                    obstacle.rect.right < self.rect.right and  center_y_check \
+                        # checking if cat look left
+                        and self.image == self.image_straight \
+                        and obstacle.image == obstacle.image_fish) \
+                        or \
+                        (obstacle.rect.left - 5 <= self.rect.right and \
+                            obstacle.rect.left > self.rect.left and center_y_check \
+                        # checking if cat look right
+                        and self.image == self.image_inverse \
+                        and obstacle.image == obstacle.image_fish):
+                    obstacle.empty()
+                    self.fish_eaten += 1                
+    
     def meow(self):
         """Makes meow sounds"""
         self.meow_sound.play()
