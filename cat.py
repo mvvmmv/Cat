@@ -20,10 +20,12 @@ class Cat(Sprite):
         
         # Uploads cat looking left image and gets rectangle.
         self.image_straight = pygame.image.load(self.settings.cat_images[0])
+        self.image_straight_m = pygame.image.load(self.settings.cat_images[1])
         self.rect = self.image_straight.get_rect()
         self.image = self.image_straight
         # Uploads cat looking right image and gets rectangle.
         self.image_inverse = pygame.image.load(self.settings.cat_images[2])
+        self.image_inverse_m = pygame.image.load(self.settings.cat_images[3])
         # self.rect = self.image_inverse.get_rect()
 
         # The cat appears at the center of the screen.
@@ -36,10 +38,7 @@ class Cat(Sprite):
         
         # Sounds
         self.meow_sound = pygame.mixer.Sound('sounds/meow.wav')
-        self.cat_current_time = time.time()   
-        self.start_time = time.time()
-        self.start_sound_time = time.time() - 20     
-        
+                
         # Cat actions counter
         self.fish_eaten = 0       
         self.mute_flag = True # game starts with no sound
@@ -142,3 +141,13 @@ class Cat(Sprite):
     def meow(self):
         """Makes meow sounds"""
         self.meow_sound.play()
+    
+    def animation(self):
+        if self.image == self.image_straight:
+            self.image = self.image_straight_m
+        elif self.image == self.image_straight_m :
+            self.image = self.image_straight
+        if self.image == self.image_inverse:
+            self.image = self.image_inverse_m
+        elif  self.image == self.image_inverse_m:
+            self.image = self.image_inverse

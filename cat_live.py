@@ -55,8 +55,14 @@ class CatLive:
         
         self.clock = Clock(self)
         self.score = Score(self, self.cat)
+        
+        # Custom event which triggers meow every 5 seconds
         self.MEOW = pygame.USEREVENT + 1
         pygame.time.set_timer(self.MEOW, 5000)
+        
+        # Custom event for animation
+        self.ANIMATION = pygame.USEREVENT + 2
+        pygame.time.set_timer(self.ANIMATION, 1000)
         
     def run_game(self): 
         """Run main cycle of the game"""
@@ -68,6 +74,8 @@ class CatLive:
                 if event.type == self.MEOW:
                     if self.cat.mute_flag == False:
                         self.cat.meow()   
+                if event.type == self.ANIMATION:
+                    self.cat.animation()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_m:
                         if self.cat.mute_flag == True:
