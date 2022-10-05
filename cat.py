@@ -1,8 +1,11 @@
+from ast import While
+from secrets import choice
 import pygame
 from pygame.sprite import Sprite
 from pygame.mixer import Sound
 import time
 from datetime import datetime
+from random import randint
 
 
 class Cat(Sprite):
@@ -35,6 +38,10 @@ class Cat(Sprite):
         # Movement
         self.pos = pygame.math.Vector2(self.rect.topleft)
         self.direction = pygame.math.Vector2()
+        self.key_pressed_time = time.perf_counter()
+        self.change_direction_timer = time.perf_counter()
+        self.roaming_flag = False
+        self.c_d_x, self.c_d_y = [0, 0]
         
         # Sounds
         self.meow_sound = pygame.mixer.Sound('sounds/meow.wav')
@@ -50,34 +57,51 @@ class Cat(Sprite):
                
         if keys[pygame.K_UP]:
             self.direction.y = -1
+            self.key_pressed_time = time.perf_counter()
         elif keys[pygame.K_DOWN]:
             self.direction.y = 1
+            self.key_pressed_time = time.perf_counter()
         else:
             self.direction.y = 0
 
         if keys[pygame.K_RIGHT]:
             self.direction.x = 1
+            self.key_pressed_time = time.perf_counter()
         elif keys[pygame.K_LEFT]:
             self.direction.x = -1
+            self.key_pressed_time = time.perf_counter()
         else:
             self.direction.x = 0
+
+        if (abs(self.key_pressed_time - time.perf_counter()) >= self.settings.afk_delay):        
+            if self.roaming_flag == False:
+                self.change_direction_timer = time.perf_counter()
+                print('changed from False to True')
+            self.roaming_flag = True
+            
+        if (abs(self.key_pressed_time - time.perf_counter()) < self.settings.afk_delay):
+            self.roaming_flag = False
   
     def update(self):
         """Update location of the cat"""
         
         self.old_rect = self.rect.copy()
-        #self.check_input(dt)
         self.check_input()
 
+        if self.roaming_flag == True:
+            # if random romaing enabled change direction every 5 seconds    
+            if time.perf_counter() - self.change_direction_timer > self.settings.keep_random_direction_time:
+                self.c_d_y, self.c_d_x, = choice([[0,1], [1,0], [-1, 0], [0, -1]])
+                self.change_direction_timer = time.perf_counter()
+            self.direction.x, self.direction.y = self.c_d_x, self.c_d_y
+        
         if self.direction.magnitude() != 0:
             self.direction = self.direction.normalize()
 
-        #self.pos.x += self.direction.x * self.settings.cat_speed * dt
         self.pos.x += self.direction.x * self.settings.cat_speed
         self.rect.x = round(self.pos.x)
         self.collision('horizontal')
 
-        #self.pos.y += self.direction.y * self.settings.cat_speed * dt
         self.pos.y += self.direction.y * self.settings.cat_speed
         self.rect.y = round(self.pos.y)
         self.collision('vertical')
@@ -99,21 +123,34 @@ class Cat(Sprite):
                     # collision on the right
                     if self.rect.right >= sprite.rect.left and self.old_rect.right <= sprite.rect.left:
                         self.rect.right = sprite.rect.left
-                        self.pos.x = self.rect.x
+                        if self.roaming_flag == False:
+                            self.pos.x = self.rect.x
+                        if self.roaming_flag == True:
+                            self.direction.x = self.direction.x * -1
                     # collision on the left
                     if self.rect.left <= sprite.rect.right and self.old_rect.left >= sprite.rect.right:
-                       self.rect.left = sprite.rect.right
-                       self.pos.x = self.rect.x
+                        self.rect.left = sprite.rect.right
+                        if self.roaming_flag == False:
+                            self.pos.x = self.rect.x
+                        if self.roaming_flag == True:
+                            self.direction.x = self.direction.x * -1
             if direction == 'vertical':
                 for sprite in collision_sprites:
                     # collision on the top
                     if self.rect.top <= sprite.rect.bottom and self.old_rect.top >= sprite.rect.bottom:
                         self.rect.top = sprite.rect.bottom
-                        self.pos.y = self.rect.y
+                        if self.roaming_flag == False:
+                            self.pos.y = self.rect.y
+                        if self.roaming_flag == True:
+                            self.direction.y = self.direction.y * -1
                     # collision on the bottom
                     if self.rect.bottom >= sprite.rect.top and self.old_rect.bottom <= sprite.rect.top:
-                       self.rect.bottom = sprite.rect.top
-                       self.pos.y = self.rect.y
+                        self.rect.bottom = sprite.rect.top
+                        if self.roaming_flag == False:
+                            self.pos.y = self.rect.y
+                        if self.roaming_flag == True:
+                            self.direction.y = self.direction.y * -1
+                       
 
     def do(self):
         """Cat actions: eat the fish
