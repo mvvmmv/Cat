@@ -110,6 +110,8 @@ class Cat(Sprite):
             self.image = self.image_inverse
         if self.direction.x == -1:
             self.image = self.image_straight
+            
+        print(self.rect)
 
     def collision(self, direction):
         """Check collisions with the obstacles"""
@@ -123,15 +125,18 @@ class Cat(Sprite):
                     # collision on the right
                     if self.rect.right >= sprite.rect.left and self.old_rect.right <= sprite.rect.left:
                         self.rect.right = sprite.rect.left
-                        if self.roaming_flag == False:
-                            self.pos.x = self.rect.x
+                        self.pos.x = self.rect.x
+                        #if self.roaming_flag == False:
+                        #    self.pos.x = self.rect.x
                         if self.roaming_flag == True:
                             self.direction.x = self.direction.x * -1
+                            
                     # collision on the left
                     if self.rect.left <= sprite.rect.right and self.old_rect.left >= sprite.rect.right:
                         self.rect.left = sprite.rect.right
-                        if self.roaming_flag == False:
-                            self.pos.x = self.rect.x
+                        self.pos.x = self.rect.x
+                        #if self.roaming_flag == False:
+                        #    self.pos.x = self.rect.x
                         if self.roaming_flag == True:
                             self.direction.x = self.direction.x * -1
             if direction == 'vertical':
@@ -139,17 +144,21 @@ class Cat(Sprite):
                     # collision on the top
                     if self.rect.top <= sprite.rect.bottom and self.old_rect.top >= sprite.rect.bottom:
                         self.rect.top = sprite.rect.bottom
-                        if self.roaming_flag == False:
-                            self.pos.y = self.rect.y
+                        self.pos.y = self.rect.y
+                        #if self.roaming_flag == False:
+                        #    self.pos.y = self.rect.y
                         if self.roaming_flag == True:
                             self.direction.y = self.direction.y * -1
+                            
                     # collision on the bottom
                     if self.rect.bottom >= sprite.rect.top and self.old_rect.bottom <= sprite.rect.top:
                         self.rect.bottom = sprite.rect.top
-                        if self.roaming_flag == False:
-                            self.pos.y = self.rect.y
+                        self.pos.y = self.rect.y
+                        #if self.roaming_flag == False:
+                        #    self.pos.y = self.rect.y
                         if self.roaming_flag == True:
                             self.direction.y = self.direction.y * -1
+                            
                        
 
     def do(self):

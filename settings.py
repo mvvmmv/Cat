@@ -34,4 +34,4 @@ class Settings():
         self.afk_delay = 1
         
         # time to keep random direction in seconds (when roaming)
-        self.keep_random_direction_time = 10
+        self.keep_random_direction_time = 3
