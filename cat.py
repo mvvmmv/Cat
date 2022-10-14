@@ -58,34 +58,37 @@ class Cat(Sprite):
     def check_input(self):
         """Handles keyboard and mouse events"""
         
-        keys = pygame.key.get_pressed()
-               
-        if keys[pygame.K_UP]:
-            self.direction.y = -1
-            self.key_pressed_time = time.perf_counter()
-        elif keys[pygame.K_DOWN]:
-            self.direction.y = 1
-            self.key_pressed_time = time.perf_counter()
+        if self.sleep == True:
+            return
         else:
-            self.direction.y = 0
-
-        if keys[pygame.K_RIGHT]:
-            self.direction.x = 1
-            self.key_pressed_time = time.perf_counter()
-        elif keys[pygame.K_LEFT]:
-            self.direction.x = -1
-            self.key_pressed_time = time.perf_counter()
-        else:
-            self.direction.x = 0
-
-        if self.sleep == False:
-            if (abs(self.key_pressed_time - time.perf_counter()) >= self.settings.afk_delay):        
-                if self.roaming_flag == False:
-                    self.change_direction_timer = time.perf_counter()
-                self.roaming_flag = True
-
-            if (abs(self.key_pressed_time - time.perf_counter()) < self.settings.afk_delay):
-                self.roaming_flag = False
+            keys = pygame.key.get_pressed()
+                   
+            if keys[pygame.K_UP]:
+                self.direction.y = -1
+                self.key_pressed_time = time.perf_counter()
+            elif keys[pygame.K_DOWN]:
+                self.direction.y = 1
+                self.key_pressed_time = time.perf_counter()
+            else:
+                self.direction.y = 0
+    
+            if keys[pygame.K_RIGHT]:
+                self.direction.x = 1
+                self.key_pressed_time = time.perf_counter()
+            elif keys[pygame.K_LEFT]:
+                self.direction.x = -1
+                self.key_pressed_time = time.perf_counter()
+            else:
+                self.direction.x = 0
+    
+            if self.sleep == False:
+                if (abs(self.key_pressed_time - time.perf_counter()) >= self.settings.afk_delay):        
+                    if self.roaming_flag == False:
+                        self.change_direction_timer = time.perf_counter()
+                    self.roaming_flag = True
+    
+                if (abs(self.key_pressed_time - time.perf_counter()) < self.settings.afk_delay):
+                    self.roaming_flag = False
   
     def update(self):
         """Update location of the cat"""
