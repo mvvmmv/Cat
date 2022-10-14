@@ -1,4 +1,3 @@
-from ast import While
 from secrets import choice
 import pygame
 from pygame.sprite import Sprite
@@ -7,11 +6,13 @@ import time
 from datetime import datetime
 from random import randint
 
+from bed import Bed
+
 
 class Cat(Sprite):
     """Create a cat"""
 
-    def __init__(self, cl_game, mute_btn, groups, obstacles):
+    def __init__(self, cl_game, mute_btn, bed, groups, obstacles):
         """Initialize the cat and define the start location"""
         super().__init__(groups)
         self.screen = cl_game.screen
@@ -20,6 +21,7 @@ class Cat(Sprite):
         self.settings = cl_game.settings
         self.mute_button = mute_btn
         self.obstacles = obstacles
+        self.bed = bed
         
         # Uploads cat looking left image and gets rectangle.
         self.image_straight = pygame.image.load(self.settings.cat_images[0])
@@ -30,6 +32,8 @@ class Cat(Sprite):
         self.image_inverse = pygame.image.load(self.settings.cat_images[2])
         self.image_inverse_m = pygame.image.load(self.settings.cat_images[3])
         # self.rect = self.image_inverse.get_rect()
+        # Upload sleeping cat image
+        self.image_sleep = pygame.image.load(self.settings.cat_images[4])
 
         # The cat appears at the center of the screen.
         self.rect.center = self.screen_rect.center
@@ -41,6 +45,7 @@ class Cat(Sprite):
         self.key_pressed_time = time.perf_counter()
         self.change_direction_timer = time.perf_counter()
         self.roaming_flag = False
+        self.sleep = False
         self.c_d_x, self.c_d_y = [0, 0]
         
         # Sounds
@@ -73,14 +78,14 @@ class Cat(Sprite):
         else:
             self.direction.x = 0
 
-        if (abs(self.key_pressed_time - time.perf_counter()) >= self.settings.afk_delay):        
-            if self.roaming_flag == False:
-                self.change_direction_timer = time.perf_counter()
-                print('changed from False to True')
-            self.roaming_flag = True
-            
-        if (abs(self.key_pressed_time - time.perf_counter()) < self.settings.afk_delay):
-            self.roaming_flag = False
+        if self.sleep == False:
+            if (abs(self.key_pressed_time - time.perf_counter()) >= self.settings.afk_delay):        
+                if self.roaming_flag == False:
+                    self.change_direction_timer = time.perf_counter()
+                self.roaming_flag = True
+
+            if (abs(self.key_pressed_time - time.perf_counter()) < self.settings.afk_delay):
+                self.roaming_flag = False
   
     def update(self):
         """Update location of the cat"""
@@ -110,8 +115,10 @@ class Cat(Sprite):
             self.image = self.image_inverse
         if self.direction.x == -1:
             self.image = self.image_straight
-            
-        print(self.rect)
+        if self.direction.y == 1:
+            self.image = self.image_straight
+        if self.direction.y == -1:
+            self.image = self.image_straight
 
     def collision(self, direction):
         """Check collisions with the obstacles"""
@@ -157,12 +164,10 @@ class Cat(Sprite):
                         #if self.roaming_flag == False:
                         #    self.pos.y = self.rect.y
                         if self.roaming_flag == True:
-                            self.direction.y = self.direction.y * -1
-                            
-                       
+                            self.direction.y = self.direction.y * -1                    
 
     def do(self):
-        """Cat actions: eat the fish
+        """Cat actions: eat the fish, sleep
         """
         for obstacle in self.obstacles:
             if obstacle.name == 'plate':
@@ -182,12 +187,30 @@ class Cat(Sprite):
                         and self.image == self.image_inverse \
                         and obstacle.image == obstacle.image_fish):
                     obstacle.empty()
-                    self.fish_eaten += 1                
+                    self.fish_eaten += 1   
+        
+        self.cat_sleep()             
+                
     
     def meow(self):
         """Makes meow sounds"""
-        self.meow_sound.play()
+        if self.mute_flag == False and self.sleep == False:
+            self.meow_sound.play()
     
+    def cat_sleep(self):
+
+        center_ybed_check = self.rect.centery in range(self.bed.rect.centery - self.settings.free_y, \
+                                self.bed.rect.centery + self.settings.free_y)
+        center_xbed_check = self.rect.centerx in range(self.bed.rect.centerx - self.settings.free_y, \
+                                self.bed.rect.centerx + self.settings.free_y)
+        if center_xbed_check and center_ybed_check:
+            if self.sleep == True:
+                self.sleep = False
+                self.image = self.image_straight
+            else:
+                self.sleep = True
+                self.image = self.image_sleep
+            
     def animation(self):
         if self.image == self.image_straight:
             self.image = self.image_straight_m

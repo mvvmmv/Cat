@@ -12,7 +12,9 @@ class Settings():
         
         # Cat images
         self.cat_images = ['images/cat_0.png', 'images/cat_1.png', \
-            'images/cat_inverse_0.png', 'images/cat_inverse_1.png']
+            'images/cat_inverse_0.png', 'images/cat_inverse_1.png', \
+            'images/cat_sleep.png']
+        self.cat_bed_image = ['images/cat_bed.png']
         
         # The borders settings
         self.border_color = (89, 89, 89)
@@ -31,7 +33,7 @@ class Settings():
         self.mb_pos = (10,50)
         
         # time to start random roaming if no user input
-        self.afk_delay = 1
+        self.afk_delay = 10
         
         # time to keep random direction in seconds (when roaming)
-        self.keep_random_direction_time = 3
+        self.keep_random_direction_time = 5

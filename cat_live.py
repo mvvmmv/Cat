@@ -8,6 +8,7 @@ from plate import Plate
 from static_obstacle import StaticObstacle
 from clock import Clock
 from score import Score
+from bed import Bed
 
 class CatLive:
     """Class for managing cat's life"""
@@ -39,7 +40,7 @@ class CatLive:
         self.top_obstacle = StaticObstacle(
             (100,0),(600, 1), [self.all_sprites, self.collision_sprites], 
             self.settings.obst_color)
-                
+                       
         # Set caption for the game window.
         pygame.display.set_caption("Cat's life")
         
@@ -51,7 +52,8 @@ class CatLive:
                 
         # Sprite setup
         self.plate = Plate(self, [self.all_sprites,self.collision_sprites])
-        self.cat = Cat(self, self.mute_button, self.all_sprites, self.collision_sprites)
+        self.bed = Bed(self, [self.all_sprites])
+        self.cat = Cat(self, self.mute_button, self.bed, self.all_sprites, self.collision_sprites)
         
         self.clock = Clock(self)
         self.score = Score(self, self.cat)
@@ -72,8 +74,7 @@ class CatLive:
                 if event.type == pygame.QUIT:
                     sys.exit()
                 if event.type == self.MEOW:
-                    if self.cat.mute_flag == False:
-                        self.cat.meow()   
+                    self.cat.meow()   
                 if event.type == self.ANIMATION:
                     self.cat.animation()
                 if event.type == pygame.KEYDOWN:
