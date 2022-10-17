@@ -4,7 +4,9 @@ class Settings():
     def __init__(self):
         self.bg_color = (230, 230, 230)
         self.screen_width = 700
+        self.screen_border_width = 100
         self.screen_height = 500
+        self.screen_border_height = 100
         self.obst_color = (207, 200, 184)
         
         # The cat's features
@@ -15,6 +17,7 @@ class Settings():
             'images/cat_inverse_0.png', 'images/cat_inverse_1.png', \
             'images/cat_sleep.png']
         self.cat_bed_image = ['images/cat_bed.png']
+        self.ball_image = ['images/ball.png']
         
         # The borders settings
         self.border_color = (89, 89, 89)
@@ -33,7 +36,7 @@ class Settings():
         self.mb_pos = (10,50)
         
         # time to start random roaming if no user input
-        self.afk_delay = 10
+        self.afk_delay = 3
         
         # time to keep random direction in seconds (when roaming)
-        self.keep_random_direction_time = 5
+        self.keep_random_direction_time = 10

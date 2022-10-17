@@ -1,5 +1,6 @@
 import sys, math, time
 import pygame
+from ball import Ball
 
 from button import Button
 from cat import Cat
@@ -30,7 +31,7 @@ class CatLive:
             self.settings.obst_color)
         
         self.right_obstacle = StaticObstacle(
-            (699,0),(1, 700), [self.all_sprites, self.collision_sprites], 
+            (600,0),(700, 700), [self.all_sprites, self.collision_sprites], 
             self.settings.obst_color)
         
         self.bottom_obstacle = StaticObstacle(
@@ -51,8 +52,9 @@ class CatLive:
         self.mute_button = Button(self, self.settings.images_of_button, self.settings.mb_pos, self.all_sprites)
                 
         # Sprite setup
-        self.plate = Plate(self, [self.all_sprites,self.collision_sprites])
+        self.plate = Plate(self, [self.all_sprites, self.collision_sprites])
         self.bed = Bed(self, [self.all_sprites])
+        self.ball = Ball(self, [self.all_sprites, self.collision_sprites], self.collision_sprites)
         self.cat = Cat(self, self.mute_button, self.bed, self.all_sprites, self.collision_sprites)
         
         self.clock = Clock(self)
@@ -68,6 +70,7 @@ class CatLive:
         
     def run_game(self): 
         """Run main cycle of the game"""
+        
         clock = pygame.time.Clock()
         while True:            
             for event in pygame.event.get():

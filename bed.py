@@ -19,6 +19,6 @@ class Bed(Sprite):
         self.rect = self.image.get_rect()
         
         # The bed appears at the corner of the board.
-        self.rect.right = self.screen_rect.right
+        self.rect.right = self.screen_rect.right-self.settings.screen_border_width
         
         self.name = 'bed'
