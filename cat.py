@@ -113,6 +113,7 @@ class Cat(Sprite):
         self.rect.y = round(self.pos.y)
         self.collision('vertical')
 
+        # Change image accordingly to cat's direction
         if self.direction.x == 1:
             self.image = self.image_inverse
         if self.direction.x == -1:
@@ -135,8 +136,6 @@ class Cat(Sprite):
                     if self.rect.right >= sprite.rect.left and self.old_rect.right <= sprite.rect.left:
                         self.rect.right = sprite.rect.left
                         self.pos.x = self.rect.x
-                        #if self.roaming_flag == False:
-                        #    self.pos.x = self.rect.x
                         if self.roaming_flag == True:
                             self.direction.x = self.direction.x * -1
                             
@@ -144,8 +143,6 @@ class Cat(Sprite):
                     if self.rect.left <= sprite.rect.right and self.old_rect.left >= sprite.rect.right:
                         self.rect.left = sprite.rect.right
                         self.pos.x = self.rect.x
-                        #if self.roaming_flag == False:
-                        #    self.pos.x = self.rect.x
                         if self.roaming_flag == True:
                             self.direction.x = self.direction.x * -1
             if direction == 'vertical':
@@ -154,8 +151,6 @@ class Cat(Sprite):
                     if self.rect.top <= sprite.rect.bottom and self.old_rect.top >= sprite.rect.bottom:
                         self.rect.top = sprite.rect.bottom
                         self.pos.y = self.rect.y
-                        #if self.roaming_flag == False:
-                        #    self.pos.y = self.rect.y
                         if self.roaming_flag == True:
                             self.direction.y = self.direction.y * -1
                             
@@ -163,12 +158,10 @@ class Cat(Sprite):
                     if self.rect.bottom >= sprite.rect.top and self.old_rect.bottom <= sprite.rect.top:
                         self.rect.bottom = sprite.rect.top
                         self.pos.y = self.rect.y
-                        #if self.roaming_flag == False:
-                        #    self.pos.y = self.rect.y
                         if self.roaming_flag == True:
                             self.direction.y = self.direction.y * -1                    
 
-    def do(self):
+    def do(self, direction=None):
         """Cat actions: eats the fish, sleeps, kicks the ball
         """
         for obstacle in self.obstacles:
@@ -188,23 +181,17 @@ class Cat(Sprite):
                             and self.image == self.image_inverse):
                         obstacle.empty()
                         self.fish_eaten += 1
+                        
             if obstacle.name == 'ball': 
-                # Checks if cat looks to the ball and is located near the plate.
+                # Checks if cat is located near the ball.
                 # Checking if the cat vertical center is in [between obstacle's top
                 # and obstacle's bottom]
                 center_y_check = obstacle.rect.centery in range(self.rect.top, \
                                                             self.rect.bottom)
                 if center_y_check:
-                    if ((obstacle.rect.right in range(self.rect.left - 5, self.rect.right) 
-                            # checking if cat look left
-                            and self.image == self.image_straight) \
-                            or  (obstacle.rect.left in range(self.rect.left+1,self.rect.right + 5 + 1)
-                            # checking if cat look right
-                            and self.image == self.image_inverse)):
-                        if self.image == self.image_straight:
-                            obstacle.kick(direction='right')
-                        if self.image == self.image_inverse:
-                            obstacle.kick(direction='left')
+                    if obstacle.rect.right in range(self.rect.left - 5, self.rect.right) \
+                            or  obstacle.rect.left in range(self.rect.left+1,self.rect.right + 5 + 1):
+                            obstacle.kick(direction=direction)
         
         self.cat_sleep()                        
             

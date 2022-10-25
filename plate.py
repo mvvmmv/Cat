@@ -20,6 +20,7 @@ class Plate(Sprite):
         
         self.image = self.image_fish
         self.rect = self.image.get_rect()
+        self.old_rect = self.rect.copy()
         
         # Properties of the plate
         self.plate_empty = True

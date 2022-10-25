@@ -54,8 +54,9 @@ class CatLive:
         # Sprite setup
         self.plate = Plate(self, [self.all_sprites, self.collision_sprites])
         self.bed = Bed(self, [self.all_sprites])
-        self.ball = Ball(self, [self.all_sprites, self.collision_sprites], self.collision_sprites)
         self.cat = Cat(self, self.mute_button, self.bed, self.all_sprites, self.collision_sprites)
+        self.ball = Ball(self, self.cat, [self.all_sprites, self.collision_sprites], self.collision_sprites)
+
         
         self.clock = Clock(self)
         self.score = Score(self, self.cat)
@@ -90,7 +91,16 @@ class CatLive:
                             self.cat.mute_button.image = self.cat.mute_button.images[0]
                             self.cat.mute_flag = True
                     if event.key == pygame.K_SPACE:
-                        self.cat.do() 
+                        self.cat.do()
+                    if event.key == pygame.K_a:
+                        self.cat.do('right')
+                    if event.key == pygame.K_d:
+                        self.cat.do('left')
+                    if event.key == pygame.K_w:
+                        self.cat.do('up')
+                    if event.key == pygame.K_s:
+                        self.cat.do('down')
+                         
                         
             self.screen.fill(self.settings.bg_color)
             self.all_sprites.update()
