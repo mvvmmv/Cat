@@ -31,14 +31,15 @@ class Ball(Sprite):
 
         self.time_kick = time.time()
         self.name = 'ball'
-        
-        self.time_collision = time.time()
-        
+                
     
     def kick(self, direction):
+        '''Set the direction of the ball and starts timer'''
         
-        # starts timer
+        # Starts timer
         self.time_kick = time.time()
+        
+        # Set the direction
         if direction == 'right':
             self.direction.x = -1
         if direction == 'left':
@@ -51,12 +52,12 @@ class Ball(Sprite):
     def update(self):
         """Update location of the ball"""
     
-        # updates only if kicked or met an obstacle
-        # and only for defined time
+        # Updates position only if ball's been kicked or met an obstacle
+        # and only for <kicked_time> time
             
         self.old_rect = self.rect.copy()
         
-        if (time.time() - self.time_kick < 1) or (time.time() - self.time_collision < 1):
+        if time.time() - self.time_kick < self.settings.kicked_time:
         
             if self.direction.magnitude() != 0:
                 self.direction = self.direction.normalize()
@@ -71,11 +72,13 @@ class Ball(Sprite):
 
         
     def collision(self, direction):
-        """Check collisions with the obstacles"""
+        """Check collisions with the obstacles or the cat"""
 
         collision_sprites = pygame.sprite.spritecollide(
             self, self.obstacles, False)
 
+        # If met obstacle - bounce, i.e. change direction to opposite 
+        # and keep moving
         if collision_sprites:
             if direction == 'horizontal':
                 for sprite in collision_sprites:
@@ -104,8 +107,10 @@ class Ball(Sprite):
                         self.rect.bottom = sprite.rect.top
                         self.pos.y = self.rect.y
                         self.direction.y = self.direction.y * -1
-                    
+        
+        # If met cat - stop            
         if pygame.sprite.collide_rect(self, self.cat):
+            
             if self.rect.right >= self.cat.rect.left and self.old_rect.right <= self.cat.old_rect.left:
                         self.rect.right = self.cat.rect.left
                         self.pos.x = self.rect.x

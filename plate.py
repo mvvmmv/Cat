@@ -1,5 +1,4 @@
 import time
-from turtle import delay
 import pygame
 from pygame.sprite import Sprite
 
@@ -28,7 +27,8 @@ class Plate(Sprite):
         self.name = 'plate'
         
         # The plate appears on the board.
-        self.rect.left = self.screen_rect.left + (self.settings.screen_width-self.settings.screen_border_width)//2
+        self.rect.left = self.screen_rect.left + \
+            (self.settings.screen_width-self.settings.screen_border_width)//2
         self.rect.top = self.screen_rect.top + self.settings.screen_border_width
         
     def empty(self):
