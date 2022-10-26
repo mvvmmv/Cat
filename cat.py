@@ -187,11 +187,21 @@ class Cat(Sprite):
                 # Checking if the cat vertical center is in [between obstacle's top
                 # and obstacle's bottom]
                 center_y_check = obstacle.rect.centery in range(self.rect.top, \
-                                                            self.rect.bottom)
+                                                            self.rect.bottom) 
+                # ball is on the right or on the left from the cat
+                ballIsRight = abs(self.rect.right - obstacle.rect.left) < abs(self.rect.left - obstacle.rect.left)
+                ballIsLeft = abs(self.rect.left - obstacle.rect.right) < abs(self.rect.right - obstacle.rect.right) 
+                                  
                 if center_y_check:
-                    if obstacle.rect.right in range(self.rect.left - 5, self.rect.right) \
-                            or  obstacle.rect.left in range(self.rect.left+1,self.rect.right + 5 + 1):
-                            obstacle.kick(direction=direction)
+                    # Checking if the cat looks at the ball
+                    # checking if cat look right and ball is on the right 
+                    # or cat look left and ball is on the left
+                    if (self.image == self.image_inverse and ballIsRight) \
+                        or (self.image == self.image_straight and ballIsLeft):
+                            # checking if the ball near the cat face on the x
+                            if obstacle.rect.right in range(self.rect.left - 5, self.rect.right) \
+                                or  obstacle.rect.left in range(self.rect.left+1,self.rect.right + 5 + 1):
+                                    obstacle.kick(direction=direction)
         
         self.cat_sleep()                        
             

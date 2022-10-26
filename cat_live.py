@@ -1,4 +1,4 @@
-import sys, math, time
+import sys
 import pygame
 from ball import Ball
 
@@ -6,68 +6,72 @@ from button import Button
 from cat import Cat
 from settings import Settings
 from plate import Plate
-from static_obstacle import StaticObstacle
+from border import Border
 from clock import Clock
 from score import Score
 from bed import Bed
 
 class CatLive:
-    """Class for managing cat's life"""
+    """Main class for the CL game"""
     
     def __init__(self):
         pygame.init()
     
-        # Set the game window.
+        # Game window setup:
         self.settings = Settings()
+        # - Set the caption
+        pygame.display.set_caption("Cat's life")
+        # - Set the icon
+        programIcon = pygame.image.load(self.settings.cat_images[0])
+        pygame.display.set_icon(programIcon)
+        # - Set the size
         self.screen = pygame.display.set_mode((self.settings.screen_width,self.settings.screen_height))
         
-        # Group setup
+        # Sprites groups setup
         self.all_sprites = pygame.sprite.Group()
         self.collision_sprites = pygame.sprite.Group()
         
         # Gameboard setup   
-        self.left_obstacle = StaticObstacle(
-            (0,0),(100, 400), [self.all_sprites, self.collision_sprites], 
-            self.settings.obst_color)
-        
-        self.right_obstacle = StaticObstacle(
-            (600,0),(700, 700), [self.all_sprites, self.collision_sprites], 
-            self.settings.obst_color)
-        
-        self.bottom_obstacle = StaticObstacle(
-            (0,400),(700, 100), [self.all_sprites, self.collision_sprites], 
-            self.settings.obst_color)
-        
-        self.top_obstacle = StaticObstacle(
-            (100,0),(600, 1), [self.all_sprites, self.collision_sprites], 
-            self.settings.obst_color)
-                       
-        # Set caption for the game window.
-        pygame.display.set_caption("Cat's life")
-        
-        # Set icon for the game window.
-        programIcon = pygame.image.load(self.settings.cat_images[0])
-        pygame.display.set_icon(programIcon)
-        
+        self.initBorders()
+        self.clock = Clock(self)
         self.mute_button = Button(self, self.settings.images_of_button, self.settings.mb_pos, self.all_sprites)
-                
-        # Sprite setup
+                       
+        # Game objects setup
         self.plate = Plate(self, [self.all_sprites, self.collision_sprites])
         self.bed = Bed(self, [self.all_sprites])
         self.cat = Cat(self, self.mute_button, self.bed, self.all_sprites, self.collision_sprites)
         self.ball = Ball(self, self.cat, [self.all_sprites, self.collision_sprites], self.collision_sprites)
-
         
-        self.clock = Clock(self)
+        
         self.score = Score(self, self.cat)
-        
-        # Custom event which triggers meow every 5 seconds
+
+
+
+        # Custom events:
+        # - Trigger for meow every 5 seconds
         self.MEOW = pygame.USEREVENT + 1
         pygame.time.set_timer(self.MEOW, 5000)
         
-        # Custom event for animation
+        # - Animation
         self.ANIMATION = pygame.USEREVENT + 2
         pygame.time.set_timer(self.ANIMATION, 1000)
+     
+    def initBorders(self):
+        self.left_obstacle = Border(
+            (0,0),(100, 400), [self.all_sprites, self.collision_sprites], 
+            self.settings.obst_color)
+        
+        self.right_obstacle = Border(
+            (600,0),(700, 700), [self.all_sprites, self.collision_sprites], 
+            self.settings.obst_color)
+        
+        self.bottom_obstacle = Border(
+            (0,400),(700, 100), [self.all_sprites, self.collision_sprites], 
+            self.settings.obst_color)
+        
+        self.top_obstacle = Border(
+            (100,0),(600, 1), [self.all_sprites, self.collision_sprites], 
+            self.settings.obst_color)
         
     def run_game(self): 
         """Run main cycle of the game"""

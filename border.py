@@ -1,6 +1,7 @@
 import pygame
+from pygame.sprite import Sprite
 
-class StaticObstacle(pygame.sprite.Sprite):
+class Border(Sprite):
     """Class for static obstacles"""
     
     def __init__(self,pos,size,groups,color):
