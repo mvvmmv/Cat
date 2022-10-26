@@ -2,7 +2,8 @@
   <img src="https://media.giphy.com/media/vVegyymxA90fkY8jkE/giphy.gif" width="100"/>
 </div>
 <div id="profile-views-counter" align="left">
-  <img src="https://komarev.com/ghpvc/?username=mvvmmv&style=flat-square&color=blue" alt=""/>
+  <img src="https://komarev.com/ghpvc/?username=mvvmmv&style=flat-square&color=blue" alt=""/><br>
+  <img src="https://img.shields.io/badge/license-Unlicense-blue.svg"/>
 </div>
 <h1>Simple cat's life</h1>
 It's the simplest imitation of a cat's life.<br>
