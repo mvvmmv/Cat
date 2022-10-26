@@ -28,5 +28,5 @@ Cat can sleep, eat, play with the ball.<br>
 <br>
 <br>
 Cat starts random roaming after 10 seconds<br>
-of not pressing LEFT, UP, DOWN, RIGH<br>
+of not pressing LEFT, UP, DOWN, RIGHT<br>
 arrow keys.
