@@ -57,19 +57,19 @@ class CatLive:
         pygame.time.set_timer(self.ANIMATION, 1000)
      
     def initBorders(self):
-        self.left_obstacle = Border(
+        self.left_border = Border(
             (0,0),(100, 400), [self.all_sprites, self.collision_sprites], 
             self.settings.obst_color)
         
-        self.right_obstacle = Border(
-            (600,0),(700, 700), [self.all_sprites, self.collision_sprites], 
+        self.right_border = Border(
+            (500,0),(500, 600), [self.all_sprites, self.collision_sprites], 
             self.settings.obst_color)
         
-        self.bottom_obstacle = Border(
-            (0,400),(700, 100), [self.all_sprites, self.collision_sprites], 
+        self.bottom_border = Border(
+            (0,350),(550, 400), [self.all_sprites, self.collision_sprites], 
             self.settings.obst_color)
         
-        self.top_obstacle = Border(
+        self.top_border = Border(
             (100,0),(600, 1), [self.all_sprites, self.collision_sprites], 
             self.settings.obst_color)
         

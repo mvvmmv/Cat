@@ -2,7 +2,7 @@ import pygame
 from pygame.sprite import Sprite
 
 class Border(Sprite):
-    """Class for static obstacles"""
+    """Class for borders"""
     
     def __init__(self,pos,size,groups,color):
         super().__init__(groups)    

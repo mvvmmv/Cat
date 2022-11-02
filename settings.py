@@ -3,9 +3,9 @@ class Settings():
     
     def __init__(self):
         self.bg_color = (230, 230, 230)
-        self.screen_width = 700
-        self.screen_border_width = 100
-        self.screen_height = 500
+        self.screen_width = 550
+        self.screen_border_width = 50
+        self.screen_height = 400
         self.screen_border_height = 100
         self.obst_color = (207, 200, 184)
         
@@ -34,7 +34,7 @@ class Settings():
         # Buttons
         self.images_of_button = ['images/mute.png',
                                  'images/un_mute.png']
-        self.mb_pos = (10,50)
+        self.mb_pos = (10,60)
         
         # time to start random roaming if no user input
         self.afk_delay = 10

@@ -29,7 +29,7 @@ class Plate(Sprite):
         # The plate appears on the board.
         self.rect.left = self.screen_rect.left + \
             (self.settings.screen_width-self.settings.screen_border_width)//2
-        self.rect.top = self.screen_rect.top + self.settings.screen_border_width
+        self.rect.top = self.screen_rect.top + 2 * self.settings.screen_border_width
         
     def empty(self):
         """Changes image of the plate to empty and starts timer"""
